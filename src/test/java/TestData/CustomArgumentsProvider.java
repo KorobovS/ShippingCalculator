@@ -11,15 +11,19 @@ import static ru.korobovs.Workload.*;
 import static ru.korobovs.Workload.VERY_HIGH_WORKLOAD;
 
 public class CustomArgumentsProvider implements ArgumentsProvider {
+
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        Cargo cargo = new Cargo(2, false, false);
 
         return Stream.of(
-                Arguments.of(cargo, LOW_WORKLOAD, 550),
-                Arguments.of(cargo, NORMAL_WORKLOAD, 580),
-                Arguments.of(cargo, HIGH_WORKLOAD, 610),
-                Arguments.of(cargo, VERY_HIGH_WORKLOAD, 640)
+                Arguments.of(new Cargo(2, false, false), LOW_WORKLOAD, 400),
+                Arguments.of(new Cargo(7, false, true), LOW_WORKLOAD, 500),
+                Arguments.of(new Cargo(2, false, false), NORMAL_WORKLOAD, 400),
+                Arguments.of(new Cargo(7, false, true), NORMAL_WORKLOAD, 600),
+                Arguments.of(new Cargo(2, false, false), HIGH_WORKLOAD, 400),
+                Arguments.of(new Cargo(7, false, true), HIGH_WORKLOAD, 700),
+                Arguments.of(new Cargo(2, false, false), VERY_HIGH_WORKLOAD, 400),
+                Arguments.of(new Cargo(7, false, true), VERY_HIGH_WORKLOAD, 800)
         );
     }
 }

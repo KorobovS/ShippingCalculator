@@ -1,4 +1,6 @@
 import TestData.CustomArgumentsProvider;
+import TestData.CustomCargo;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +15,7 @@ import ru.korobovs.Cargo;
 @Epic("Тестируем калькулятор")
 public class CalculationUnitTest {
 
-    @Step("Функция расстояния")
+    @Step("Проверяем метод подсчета расстояния")
     @DisplayName("Проверяем оплату на разные расстояния")
     @Tag("distance")
     @ParameterizedTest
@@ -25,7 +27,19 @@ public class CalculationUnitTest {
         Assertions.assertEquals(summa, result);
     }
 
-    @Step("Функция размер")
+    @Step("Проверяем метод подсчета расстояния")
+    @DisplayName("Проверяем оплату на разные расстояния")
+    @Tags({@Tag("distance"), @Tag("negative")})
+    @ParameterizedTest
+    @CsvSource({"0", "-6"})
+    public void testGetCostDistanceNegative(int distance) {
+
+        Assertions.assertThrows(RuntimeException.class, () ->
+                        Calculation.getCostDistance(distance),
+                "Расстояние должно быть больше 0");
+    }
+
+    @Step("Проверяем метод подсчета размера")
     @DisplayName("Проверяем оплату за размер")
     @Tag("isBig")
     @ParameterizedTest
@@ -40,7 +54,7 @@ public class CalculationUnitTest {
         Assertions.assertEquals(summa, result);
     }
 
-    @Step("Функция хрупкость")
+    @Step("Проверяем метод подсчета хрупкости")
     @DisplayName("Проверяем оплату за хрупкий товар")
     @Tags({@Tag("fragile"), @Tag("distance")})
     @ParameterizedTest
@@ -52,7 +66,33 @@ public class CalculationUnitTest {
         Assertions.assertEquals(summa, result);
     }
 
-    @Step("Функция калькулято")
+    @Step("Проверяем метод подсчета хрупкости")
+    @DisplayName("Проверяем оплату за хрупкий товар")
+    @Tags({@Tag("fragile"), @Tag("distance"), @Tag("negative")})
+    @ParameterizedTest
+    @CsvSource({
+            "true, 31",
+            "true, 45"
+    })
+    public void testGetCostFragileNegative(boolean fragile, int distance, int summa) {
+
+        Assertions.assertThrows(RuntimeException.class, () ->
+                        Calculation.getCostFragile(fragile, distance),
+                "Хрупкие грузы нельзя возить на расстояние более 30 км");
+    }
+
+    @Step("Проверяем метод подсчета с учетом min цены")
+    @DisplayName("Проверяем оплату с учетом min цены")
+    @Tags({@Tag("fragile"), @Tag("distance"), @Tag("isBig")})
+    @ParameterizedTest
+    @ArgumentsSource(CustomCargo.class)
+    public void testGetCostWithCriteria(Cargo cargo, int summa) {
+        int result = Calculation.getCostWithCriteria(cargo);
+
+        Assertions.assertEquals(summa, result);
+    }
+
+    @Step("Проверяем калькулятор с учетом загруженности")
     @DisplayName("Проверяем оплату за загруженность склада")
     @Tags({@Tag("workload"), @Tag("fragile"), @Tag("distance"), @Tag("isBig")})
     @ParameterizedTest

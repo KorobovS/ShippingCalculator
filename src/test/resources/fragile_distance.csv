@@ -1,8 +1,6 @@
 FRAGILE, DISTANCE, SUMMA
 true, 15, 300
 true, 30, 300
-true, 31, 1000000
-true, 45, 1000000
 false, 15, 0
 false, 30, 0
 false, 31, 0
