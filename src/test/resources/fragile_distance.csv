@@ -1,0 +1,7 @@
+FRAGILE, DISTANCE, SUMMA
+true, 15, 300
+true, 30, 300
+false, 15, 0
+false, 30, 0
+false, 31, 0
+false, 45, 0
