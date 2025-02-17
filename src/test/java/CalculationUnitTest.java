@@ -1,6 +1,5 @@
 import TestData.CustomArgumentsProvider;
 import TestData.CustomCargo;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
@@ -74,7 +73,7 @@ public class CalculationUnitTest {
             "true, 31",
             "true, 45"
     })
-    public void testGetCostFragileNegative(boolean fragile, int distance, int summa) {
+    public void testGetCostFragileNegative(boolean fragile, int distance) {
 
         Assertions.assertThrows(RuntimeException.class, () ->
                         Calculation.getCostFragile(fragile, distance),
