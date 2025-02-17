@@ -5,6 +5,9 @@ public class Calculation {
     public static final int MIN_COST = 400;
 
     public static int getCostDistance(int distance) {
+        if (distance < 1) {
+            throw new RuntimeException("Расстояние должно быть больше 0");
+        }
         if (distance <= 2) {
             return 50;
         } else if (distance <= 10) {
@@ -23,18 +26,26 @@ public class Calculation {
     }
 
     public static int getCostFragile(boolean fragile, int distance) {
-        if (fragile && distance <= 30) {
+        if (fragile && distance > 30) {
+            throw new RuntimeException("Хрупкие грузы нельзя возить на расстояние более 30 км");
+        } else if (fragile) {
             return 300;
-        } else if (!fragile) {
-            return 0;
         }
-        return 1000000;
+        return 0;
+    }
+
+    public static int getCostWithCriteria(Cargo cargo) {
+        return getCostDistance(cargo.getDistance())
+                + getCostBig(cargo.isBig())
+                + getCostFragile(cargo.isFragile(), cargo.getDistance());
     }
 
     public static double calculation(Cargo cargo, double workload) {
-        return (getCostDistance(cargo.getDistance())
-                + getCostBig(cargo.isBig())
-                + getCostFragile(cargo.isFragile(), cargo.getDistance())
-        ) * workload + MIN_COST;
+        double summa = getCostWithCriteria(cargo) * workload;
+
+        if (summa > MIN_COST) {
+            return summa ;
+        }
+        return MIN_COST;
     }
 }
